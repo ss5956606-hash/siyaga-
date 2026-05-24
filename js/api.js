@@ -1,13 +1,12 @@
 /**
- * api.js - OpenAI API integration for the Arabic text rephrasing tool
+ * api.js - Gemini API integration for the Arabic text rephrasing tool
  */
 
 var SiyagaAPI = (function () {
   'use strict';
 
-  var STORAGE_KEY = 'openai_api_key';
-  var API_ENDPOINT = 'https://api.openai.com/v1/chat/completions';
-  var MODEL = 'gpt-4o-mini';
+  var STORAGE_KEY = 'gemini_api_key';
+  var API_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
 
   // Non-blocking logger
   var logger = {
@@ -30,7 +29,7 @@ var SiyagaAPI = (function () {
 
   /**
    * Save API key to localStorage
-   * @param {string} key - The OpenAI API key
+   * @param {string} key - The Gemini API key
    */
   function saveApiKey(key) {
     try {
@@ -55,7 +54,7 @@ var SiyagaAPI = (function () {
   }
 
   /**
-   * Call OpenAI Chat Completions API to rephrase text
+   * Call Gemini API to rephrase text
    * @param {string} text - The text to rephrase
    * @param {string} systemPrompt - The system prompt with instructions
    * @returns {Promise<{success: boolean, text?: string, error?: string}>}
@@ -81,20 +80,24 @@ var SiyagaAPI = (function () {
     }, 60000);
 
     try {
-      var response = await fetch(API_ENDPOINT, {
+      var response = await fetch(API_ENDPOINT + '?key=' + apiKey, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + apiKey,
         },
         body: JSON.stringify({
-          model: MODEL,
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: text },
+          system_instruction: {
+            parts: [{ text: systemPrompt }],
+          },
+          contents: [
+            {
+              parts: [{ text: text }],
+            },
           ],
-          temperature: 0.7,
-          max_tokens: 4096,
+          generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 4096,
+          },
         }),
         signal: controller.signal,
       });
@@ -112,8 +115,8 @@ var SiyagaAPI = (function () {
 
       var data = await response.json();
 
-      if (data.choices && data.choices.length > 0 && data.choices[0].message) {
-        var resultText = data.choices[0].message.content;
+      if (data.candidates && data.candidates.length > 0 && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts.length > 0) {
+        var resultText = data.candidates[0].content.parts[0].text;
         logger.info('Rephrase completed successfully', { resultLength: resultText.length });
         return { success: true, text: resultText };
       }
