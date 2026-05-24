@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>صياغة - اعادة صياغة النصوص</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="min-h-screen py-8 px-4">
+  <!-- Header -->
+  <header class="header-gradient rounded-2xl shadow-xl max-w-4xl mx-auto mb-8 p-8 text-center text-white">
+    <h1 class="text-4xl md:text-5xl font-extrabold mb-3">صياغة</h1>
+    <p class="text-lg md:text-xl opacity-90">اعد صياغة نصوصك بأسلوب احترافي وطبيعي باستخدام الذكاء الاصطناعي</p>
+  </header>
+
+  <main class="max-w-4xl mx-auto space-y-6">
+    <!-- API Key Section -->
+    <section class="card rounded-2xl shadow-lg p-6">
+      <h2 class="text-lg font-bold text-gray-700 mb-4">مفتاح OpenAI API</h2>
+      <div class="flex flex-col sm:flex-row gap-3">
+        <div class="flex-1 relative">
+          <input
+            type="password"
+            id="api-key-input"
+            placeholder="ادخل مفتاح API الخاص بك..."
+            class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm"
+          >
+        </div>
+        <div class="flex gap-2">
+          <button
+            id="api-key-toggle-btn"
+            class="px-4 py-3 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-600 text-sm font-medium transition-all"
+          >اظهار</button>
+          <button
+            id="api-key-save-btn"
+            class="px-6 py-3 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium transition-all"
+          >حفظ</button>
+        </div>
+      </div>
+      <p id="api-key-status" class="mt-2 text-sm hidden"></p>
+    </section>
+
+    <!-- Input Text Section -->
+    <section class="card rounded-2xl shadow-lg p-6">
+      <h2 class="text-lg font-bold text-gray-700 mb-4">النص الاصلي</h2>
+      <textarea
+        id="input-text"
+        rows="8"
+        placeholder="الصق النص هنا لاعادة صياغته..."
+        class="w-full px-4 py-3 rounded-xl border border-gray-200 resize-y text-base leading-relaxed"
+      ></textarea>
+      <div class="mt-2 text-sm text-gray-500">
+        <span id="word-count">0 كلمة</span>
+      </div>
+    </section>
+
+    <!-- Options Panel -->
+    <section class="card rounded-2xl shadow-lg p-6">
+      <h2 class="text-lg font-bold text-gray-700 mb-4">خيارات الصياغة</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 options-grid">
+        <!-- Style Selector -->
+        <div>
+          <label for="style-select" class="block text-sm font-medium text-gray-600 mb-2">الاسلوب</label>
+          <select
+            id="style-select"
+            class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm"
+          >
+            <option value="academic">اكاديمي</option>
+            <option value="journalistic">صحفي</option>
+            <option value="conversational">محادثة</option>
+          </select>
+        </div>
+
+        <!-- Level Selector -->
+        <div>
+          <label for="level-select" class="block text-sm font-medium text-gray-600 mb-2">مستوى التغيير</label>
+          <select
+            id="level-select"
+            class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm"
+          >
+            <option value="light">خفيف</option>
+            <option value="medium" selected>متوسط</option>
+            <option value="deep">عميق</option>
+          </select>
+        </div>
+
+        <!-- Numbering Toggle -->
+        <div>
+          <label class="block text-sm font-medium text-gray-600 mb-2">ترقيم الفقرات</label>
+          <label class="flex items-center gap-3 cursor-pointer">
+            <input type="checkbox" id="numbering-toggle" class="sr-only peer">
+            <div class="w-12 h-6 bg-gray-200 rounded-full peer peer-checked:bg-purple-600 relative after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:-translate-x-6 after:shadow-sm"></div>
+            <span class="text-sm text-gray-600">تفعيل</span>
+          </label>
+        </div>
+
+        <!-- Sources Toggle -->
+        <div>
+          <label class="block text-sm font-medium text-gray-600 mb-2">اقتراح مصادر</label>
+          <label class="flex items-center gap-3 cursor-pointer">
+            <input type="checkbox" id="sources-toggle" class="sr-only peer">
+            <div class="w-12 h-6 bg-gray-200 rounded-full peer peer-checked:bg-purple-600 relative after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:-translate-x-6 after:shadow-sm"></div>
+            <span class="text-sm text-gray-600">تفعيل</span>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <!-- Rephrase Button -->
+    <div class="text-center">
+      <button
+        id="rephrase-btn"
+        class="btn-primary px-12 py-4 rounded-2xl text-white text-lg font-bold shadow-lg"
+      >
+        <span id="rephrase-btn-text">اعادة الصياغة</span>
+        <svg id="rephrase-btn-spinner" class="hidden w-6 h-6 mx-auto animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Error Message -->
+    <div id="error-message" class="hidden text-center bg-red-50 border border-red-200 text-red-600 rounded-xl p-4 text-sm"></div>
+
+    <!-- Results Section -->
+    <section id="results-section" class="hidden card rounded-2xl shadow-lg p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-bold text-gray-700">النص المعاد صياغته</h2>
+        <span id="change-percentage" class="percentage-badge">0% تغيير</span>
+      </div>
+
+      <div id="result-text" class="result-card bg-gray-50 rounded-xl p-5 text-base leading-relaxed text-gray-800 whitespace-pre-wrap"></div>
+
+      <!-- Sources Section -->
+      <div id="sources-section" class="hidden mt-4 p-4 bg-purple-50 rounded-xl border border-purple-100">
+        <h3 class="text-sm font-bold text-purple-700 mb-2">المصادر المقترحة</h3>
+        <p class="text-sm text-purple-600">المصادر مضمنة في النص اعلاه</p>
+      </div>
+
+      <!-- Copy Button -->
+      <div class="mt-4 text-center">
+        <button
+          id="copy-btn"
+          class="px-8 py-3 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium transition-all"
+        >نسخ النص</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="max-w-4xl mx-auto mt-12 text-center text-sm text-gray-500 pb-8">
+    <p>صياغة &copy; 2024 - اداة اعادة صياغة النصوص العربية بالذكاء الاصطناعي</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/prompts.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+{
+  "task_id": "task-build-siyaga-tool",
+  "task_description": "Build a modern Arabic text rephrasing tool as a static web application. The tool allows users to paste text and get it rephrased in a human-like style, with options for academic/journalistic/conversational tone, light/medium/deep rephrasing levels, automatic paragraph numbering, and suggested references. Uses OpenAI API (client-side) with user-provided API key stored in localStorage. Built with HTML + Tailwind CSS (CDN) + vanilla JavaScript, no build tools or package managers required.",
+  "status": "in_progress",
+  "feature_order": ["FEAT-001"],
+  "blocked_reason": null
+}

@@ -1,0 +1,24 @@
+{
+  "project_type": "Static web application (HTML + CSS + JavaScript) - Arabic text rephrasing tool",
+  "language": "JavaScript (ES6+), HTML5, CSS3",
+  "build_system": "None - static files served directly, no build step required",
+  "test_framework": "None - manual browser testing, validation via file existence and syntax checks",
+  "build_command": "No build step. Validate HTML syntax with basic checks.",
+  "test_command": "No automated tests. Verify files exist and JS has no syntax errors using node --check",
+  "verification_instructions": "1. Verify all files exist in the correct structure. 2. Run node --check on all .js files to confirm no syntax errors. 3. Verify index.html contains proper structure and references to CSS/JS files.",
+  "snapshot_or_generated_files": null,
+  "setup_instructions": "No setup needed. Open index.html in a browser directly.",
+  "environment_constraints": "INTEGRATIONS_ONLY network - cannot install any packages from npm or any external source. All dependencies (Tailwind CSS, Google Fonts) are loaded via CDN script tags in HTML (only needed at browser runtime, not build time). No npm, no pnpm, no node_modules.",
+  "contribution_requirements": "No CONTRIBUTING.md exists. This is a greenfield project.",
+  "key_patterns": "Static web app pattern: single HTML entry point, separate CSS and JS modules. RTL Arabic interface. Client-side OpenAI API calls. localStorage for API key persistence.",
+  "relevant_files": [
+    "index.html",
+    "css/styles.css",
+    "js/app.js",
+    "js/api.js",
+    "js/prompts.js",
+    "PROJECT_MAP.md",
+    ".env.example"
+  ],
+  "directory_structure": "Root: index.html (main page), css/ (custom styles), js/ (application logic split into app.js, api.js, prompts.js), PROJECT_MAP.md (documentation), .env.example (environment variable template)"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "FEAT-001",
+  "type": "feat",
+  "description": "Build the complete Arabic text rephrasing tool - all HTML structure, CSS styling, JavaScript logic, OpenAI API integration, and documentation files.",
+  "status": "in_progress",
+  "steps": [
+    "Create js/prompts.js with the system prompts for each rephrasing style (academic/journalistic/conversational) and each level (light/medium/deep). Include Arabic-language prompts with instructions for paragraph numbering and source suggestions when toggled on.",
+    "Create js/api.js with the OpenAI Chat Completions API integration. Implement: saveApiKey(key) to localStorage, getApiKey() from localStorage, rephrase(text, systemPrompt) that calls the OpenAI API endpoint https://api.openai.com/v1/chat/completions using fetch with model gpt-4o-mini. Include the non-blocking logger pattern. Handle errors gracefully and return structured responses.",
+    "Create js/app.js with the main application logic: DOM element references, event listeners for the rephrase button, copy button, API key save button, option toggles (style, level, numbering, sources). Implement word counter for textarea, loading state management, result display with change percentage calculation, and clipboard copy functionality. Wire together prompts.js and api.js.",
+    "Create css/styles.css with custom styles: RTL-specific adjustments, custom animations (fade-in, slide-up for results), gradient backgrounds, custom scrollbar styling, textarea focus states, button hover effects, and responsive breakpoints for mobile.",
+    "Create index.html as the main entry point. Include: Tailwind CSS CDN script tag, Google Fonts (Tajawal) link, reference to css/styles.css. Build the full UI with RTL dir attribute: header with app title/description, API key input section, main textarea with word counter, options panel (style selector, level selector, numbering toggle, sources toggle), rephrase button with loading state, results section (rephrased text, numbered paragraphs, suggested sources, change percentage), copy button. Use Tailwind classes for modern gradient design, shadows, rounded corners, responsive grid.",
+    "Create .env.example with OPENAI_API_KEY=your_api_key_here as a reference for users.",
+    "Create PROJECT_MAP.md documenting the project structure, how to use the tool, file responsibilities, and the architecture decisions (static site, client-side API calls, localStorage for key storage)."
+  ],
+  "acceptance_criteria": [
+    "All 7 files exist in the correct directory structure: index.html, css/styles.css, js/app.js, js/api.js, js/prompts.js, PROJECT_MAP.md, .env.example",
+    "Running 'node --check js/app.js', 'node --check js/api.js', 'node --check js/prompts.js' all pass without syntax errors",
+    "index.html contains proper HTML5 structure with RTL support (dir='rtl', lang='ar')",
+    "index.html includes Tailwind CSS CDN script tag and Google Fonts link",
+    "index.html references all CSS and JS files correctly",
+    "js/prompts.js exports/defines prompts for 3 styles x 3 levels = at least 3 style prompts with level modifiers",
+    "js/api.js contains fetch call to OpenAI API with proper headers and body structure",
+    "js/app.js contains event listeners, DOM manipulation, word counter, and copy functionality",
+    "css/styles.css contains RTL adjustments and animation keyframes",
+    "The UI includes all required elements: textarea, options panel, rephrase button, results section, copy button, API key input"
+  ],
+  "verification": [
+    "Run 'ls -la /projects/sandbox/siyaga-/' to confirm all top-level files exist",
+    "Run 'ls -la /projects/sandbox/siyaga-/css/' to confirm styles.css exists",
+    "Run 'ls -la /projects/sandbox/siyaga-/js/' to confirm app.js, api.js, prompts.js exist",
+    "Run 'node --check /projects/sandbox/siyaga-/js/app.js' to verify no syntax errors",
+    "Run 'node --check /projects/sandbox/siyaga-/js/api.js' to verify no syntax errors",
+    "Run 'node --check /projects/sandbox/siyaga-/js/prompts.js' to verify no syntax errors"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}
