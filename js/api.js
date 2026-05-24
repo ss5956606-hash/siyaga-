@@ -75,6 +75,11 @@ var SiyagaAPI = (function () {
 
     logger.info('Starting rephrase request', { textLength: text.length });
 
+    var controller = new AbortController();
+    var timeoutId = setTimeout(function () {
+      controller.abort();
+    }, 60000);
+
     try {
       var response = await fetch(API_ENDPOINT, {
         method: 'POST',
@@ -91,7 +96,10 @@ var SiyagaAPI = (function () {
           temperature: 0.7,
           max_tokens: 4096,
         }),
+        signal: controller.signal,
       });
+
+      clearTimeout(timeoutId);
 
       if (!response.ok) {
         var errorData = await response.json().catch(function () {
@@ -113,6 +121,11 @@ var SiyagaAPI = (function () {
       logger.error('Unexpected API response format', data);
       return { success: false, error: 'تنسيق استجابة غير متوقع من الخادم.' };
     } catch (e) {
+      clearTimeout(timeoutId);
+      if (e.name === 'AbortError') {
+        logger.error('Request timed out after 60 seconds');
+        return { success: false, error: 'انتهت مهلة الطلب. يرجى المحاولة مرة اخرى او تقليل حجم النص.' };
+      }
       logger.error('Network error during rephrase', e);
       return { success: false, error: 'خطأ في الشبكة. يرجى التحقق من اتصال الانترنت.' };
     }

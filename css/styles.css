@@ -1,7 +1,7 @@
 /* styles.css - Custom styles for Siyaga Arabic text rephrasing tool */
 
 /* RTL-specific adjustments */
-* {
+body {
   direction: rtl;
 }
 

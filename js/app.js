@@ -190,6 +190,12 @@
       return;
     }
 
+    var wordCount = text.split(/\s+/).length;
+    if (wordCount > 5000) {
+      showError('النص طويل جدا (' + wordCount + ' كلمة). يرجى تقليل النص الى 5000 كلمة او اقل.');
+      return;
+    }
+
     var style = elements.styleSelect.value;
     var level = elements.levelSelect.value;
     var withNumbering = elements.numberingToggle.checked;
