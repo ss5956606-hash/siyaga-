@@ -8,10 +8,20 @@
   // DOM element references
   var elements = {};
 
+  // Provider key URLs mapping
+  var PROVIDER_KEY_URLS = {
+    gemini_2_flash: 'https://aistudio.google.com/apikey',
+    gemini_1_5_flash: 'https://aistudio.google.com/apikey',
+    cohere: 'https://dashboard.cohere.com/api-keys',
+    openrouter: 'https://openrouter.ai/keys',
+  };
+
   /**
    * Initialize DOM references
    */
   function initElements() {
+    elements.providerSelect = document.getElementById('provider-select');
+    elements.getKeyLink = document.getElementById('get-key-link');
     elements.apiKeyInput = document.getElementById('api-key-input');
     elements.apiKeySaveBtn = document.getElementById('api-key-save-btn');
     elements.apiKeyToggleBtn = document.getElementById('api-key-toggle-btn');
@@ -47,14 +57,51 @@
   }
 
   /**
-   * Load saved API key on page load
+   * Load saved provider selection and API key on page load
    */
-  function loadApiKey() {
+  function loadProviderAndKey() {
+    var savedProvider = SiyagaAPI.getSelectedProvider();
+    elements.providerSelect.value = savedProvider;
+    updateKeyLink(savedProvider);
+
     var savedKey = SiyagaAPI.getApiKey();
     if (savedKey) {
       elements.apiKeyInput.value = savedKey;
       elements.apiKeyStatus.textContent = 'تم حفظ المفتاح';
       elements.apiKeyStatus.classList.remove('hidden');
+    }
+  }
+
+  /**
+   * Update the "get key" link based on selected provider
+   * @param {string} providerId
+   */
+  function updateKeyLink(providerId) {
+    var url = PROVIDER_KEY_URLS[providerId] || PROVIDER_KEY_URLS.gemini_1_5_flash;
+    elements.getKeyLink.href = url;
+  }
+
+  /**
+   * Handle provider change
+   */
+  function handleProviderChange() {
+    var providerId = elements.providerSelect.value;
+    SiyagaAPI.setSelectedProvider(providerId);
+    updateKeyLink(providerId);
+
+    // Load the saved key for the new provider (if any)
+    var savedKey = SiyagaAPI.getApiKey();
+    elements.apiKeyInput.value = savedKey || '';
+    elements.apiKeyInput.type = 'password';
+    elements.apiKeyToggleBtn.textContent = 'اظهار';
+
+    if (savedKey) {
+      elements.apiKeyStatus.textContent = 'تم حفظ المفتاح';
+      elements.apiKeyStatus.classList.remove('hidden');
+      elements.apiKeyStatus.classList.add('text-green-500');
+      elements.apiKeyStatus.classList.remove('text-red-500');
+    } else {
+      elements.apiKeyStatus.classList.add('hidden');
     }
   }
 
@@ -254,6 +301,7 @@
    */
   function attachEventListeners() {
     elements.inputText.addEventListener('input', updateWordCount);
+    elements.providerSelect.addEventListener('change', handleProviderChange);
     elements.apiKeySaveBtn.addEventListener('click', handleSaveApiKey);
     elements.apiKeyToggleBtn.addEventListener('click', handleToggleApiKey);
     elements.rephraseBtn.addEventListener('click', handleRephrase);
@@ -265,7 +313,7 @@
    */
   function init() {
     initElements();
-    loadApiKey();
+    loadProviderAndKey();
     updateWordCount();
     attachEventListeners();
   }

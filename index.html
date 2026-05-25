@@ -18,15 +18,37 @@
   </header>
 
   <main class="max-w-4xl mx-auto space-y-6">
-    <!-- API Key Section -->
+    <!-- API Provider Section -->
     <section class="card rounded-2xl shadow-lg p-6">
-      <h2 class="text-lg font-bold text-gray-700 mb-4">مفتاح Gemini API</h2>
+      <h2 class="text-lg font-bold text-gray-700 mb-4">مزود الذكاء الاصطناعي</h2>
+
+      <!-- Provider Selector -->
+      <div class="mb-4">
+        <label for="provider-select" class="block text-sm font-medium text-gray-600 mb-2">اختر المزود</label>
+        <select
+          id="provider-select"
+          class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm"
+        >
+          <option value="gemini_1_5_flash">Gemini 1.5 Flash (حصة مجانية اكبر)</option>
+          <option value="gemini_2_flash">Gemini 2.0 Flash</option>
+          <option value="cohere">Cohere (1000 طلب/شهر مجانا)</option>
+          <option value="openrouter">OpenRouter (موديلات مجانية)</option>
+        </select>
+        <p class="mt-1 text-xs text-gray-500">جميع الخيارات مجانية</p>
+      </div>
+
+      <!-- API Key Link -->
+      <div id="provider-key-link" class="mb-3">
+        <a id="get-key-link" href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer" class="text-xs text-purple-600 hover:text-purple-800 underline">احصل على مفتاح مجاني من هنا</a>
+      </div>
+
+      <!-- API Key Input -->
       <div class="flex flex-col sm:flex-row gap-3">
         <div class="flex-1 relative">
           <input
             type="password"
             id="api-key-input"
-            placeholder="ادخل مفتاح Gemini API الخاص بك..."
+            placeholder="ادخل مفتاح API الخاص بك..."
             class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm"
           >
         </div>
